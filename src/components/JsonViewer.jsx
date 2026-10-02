@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 
 /**
@@ -78,15 +78,4 @@ function formatScalar(value) {
   if (value === undefined) return 'undefined'
   if (typeof value === 'string') return `"${value}"`
   return String(value)
-}
-
-/** Flattened JSON text used for search and copy. */
-export function useFlattenJson(data) {
-  return useMemo(() => {
-    try {
-      return JSON.stringify(data, null, 2)
-    } catch {
-      return ''
-    }
-  }, [data])
 }

@@ -24,6 +24,7 @@ APIForge runs entirely in your browser. There is no backend, no account, and no 
 | Shortcut | Action |
 | --- | --- |
 | `Ctrl/Cmd + K` | Open the command palette |
+| `Ctrl/Cmd + Shift + P` | Same (browsers reserve `Ctrl + K` for the address bar) |
 | `Ctrl/Cmd + Enter` | Send the current request |
 | `Ctrl/Cmd + B` | Collapse or expand the sidebar |
 | `Ctrl/Cmd + J` | Start a new request |
@@ -91,7 +92,7 @@ src/
 │   ├── CommandPalette.jsx
 │   └── Dialogs.jsx    # environment manager, settings
 ├── context/           # workspace state and persistence
-├── hooks/             # request runner, hotkeys, media queries
+├── hooks/             # request runner, global hotkeys
 ├── lib/               # cn helper
 ├── services/          # fetch client, storage adapter
 └── utils/             # variable resolution, formatting

@@ -147,7 +147,6 @@ export function WorkspaceProvider({ children }) {
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [envManagerOpen, setEnvManagerOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const abortRef = useRef(null)
   const toastId = useRef(0)
@@ -402,7 +401,6 @@ export function WorkspaceProvider({ children }) {
       // ui
       theme,
       sidebarCollapsed,
-      sidebarOpen,
       mobileNavOpen,
       timeoutMs,
       toastQueue,
@@ -438,7 +436,6 @@ export function WorkspaceProvider({ children }) {
       setSidebarCollapsed,
       toggleNavigation,
       setTimeoutMs,
-      setSidebarOpen,
       setMobileNavOpen,
       setPaletteOpen,
       setSettingsOpen,
@@ -460,7 +457,6 @@ export function WorkspaceProvider({ children }) {
       error,
       theme,
       sidebarCollapsed,
-      sidebarOpen,
       mobileNavOpen,
       timeoutMs,
       paletteOpen,

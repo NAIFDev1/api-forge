@@ -33,11 +33,6 @@ export function formatClock(ts) {
   })
 }
 
-export function formatJson(value, indent = 2) {
-  return JSON.stringify(value, null, indent)
-}
-
-/** Returns {ok, text, error} so the caller can surface precise feedback. */
 export function tryFormatJson(text) {
   if (!text || !text.trim()) return { ok: false, text: text ?? '', error: 'Body is empty.' }
   try {

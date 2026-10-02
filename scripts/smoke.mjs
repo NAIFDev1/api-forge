@@ -144,6 +144,7 @@ keydown('ctrl+Enter')
 await sleep(500)
 
 check('Request actually sent', calls.length > 0, calls.map((c) => `${c.method} ${c.url}`).join(', '))
+check('Ctrl+Enter sends exactly one request', calls.length === 1, `${calls.length} call(s) for one shortcut`)
 check('GET method used', calls[0]?.method === 'GET', String(calls[0]?.method))
 check('Response status shown', text().includes('200'), text().match(/\d{3}/)?.[0] ?? 'no status')
 check('Response body rendered', bodyText().includes('Leanne Graham'))
@@ -220,6 +221,28 @@ if (loginButton) {
   check('201 rendered', bodyText().includes('201'))
   check('Active environment still applied', postCall?.url === 'https://jsonplaceholder.typicode.com/posts', String(postCall?.url))
 }
+
+// --- keyboard shortcuts that depend on how the browser reports the key ------
+// A real browser sends shift+? when the user presses "?", never a bare "?".
+const shiftQuestion = new window.KeyboardEvent('keydown', {
+  key: '?',
+  shiftKey: true,
+  bubbles: true,
+  cancelable: true,
+})
+window.document.body.dispatchEvent(shiftQuestion)
+await sleep(150)
+check('Shift+/ opens the shortcut list', bodyText().includes('Shortcuts') && bodyText().includes('new request'))
+keydown('Escape')
+await sleep(120)
+
+// --- palette alias for browsers that reserve Ctrl+K --------------------------
+keydown('ctrl+shift+p')
+await sleep(150)
+check('Ctrl+Shift+P opens the palette', Boolean(window.document.querySelector('[aria-label="Command palette"]')))
+keydown('Escape')
+await sleep(150)
+check('Escape closes the palette', !window.document.querySelector('[aria-label="Command palette"]'))
 
 // --- persistence --------------------------------------------------------------
 check('Collections persisted to localStorage', Boolean(window.localStorage.getItem('apiforge:collections')))

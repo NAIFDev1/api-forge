@@ -11,10 +11,7 @@ export function useRequestRunner() {
   const send = useCallback(async () => {
     if (ws.status === 'loading') return
 
-    const { request, missing } = resolveRequest(ws.request, ws.activeEnvironment)
-    if (missing.length && !request.url.includes('{{')) {
-      // unresolved variables that were not left as placeholders
-    }
+    const { request } = resolveRequest(ws.request, ws.activeEnvironment)
 
     const controller = new AbortController()
     ws.abortRef.current = controller

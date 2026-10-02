@@ -23,7 +23,11 @@ export function useHotkeys(map, { enabled = true } = {}) {
       const mod = event.ctrlKey || event.metaKey
       const parts = []
       if (mod) parts.push('mod')
-      if (event.shiftKey) parts.push('shift')
+      // The browser already encodes shift into non-alphanumeric keys ("?" is
+      // Shift+/), but letters arrive as their unshifted character, so Shift+P
+      // still needs the explicit prefix to match "shift+p".
+      const keyIsAlnum = /^[a-z0-9]$/i.test(event.key)
+      if (event.shiftKey && keyIsAlnum) parts.push('shift')
       if (event.altKey) parts.push('alt')
       parts.push(event.key.toLowerCase())
       const combo = parts.join('+')
@@ -41,50 +45,4 @@ export function useHotkeys(map, { enabled = true } = {}) {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [enabled])
-}
-
-/** Focus trap + Escape handling shared by the dialogs. */
-export function useDialog(open, onClose, containerRef) {
-  useEffect(() => {
-    if (!open) return
-
-    const previous = document.activeElement
-
-    function onKey(event) {
-      if (event.key === 'Escape') {
-        event.stopPropagation()
-        onClose()
-        return
-      }
-      if (event.key !== 'Tab') return
-      const root = containerRef.current
-      if (!root) return
-      const focusables = root.querySelectorAll(
-        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-      )
-      if (!focusables.length) return
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', onKey, true)
-    const t = setTimeout(() => {
-      const root = containerRef.current
-      const target = root?.querySelector('[data-autofocus]') ?? root
-      target?.focus?.()
-    }, 20)
-
-    return () => {
-      document.removeEventListener('keydown', onKey, true)
-      clearTimeout(t)
-      previous?.focus?.()
-    }
-  }, [open, onClose, containerRef])
 }

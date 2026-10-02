@@ -27,9 +27,17 @@ export default function App() {
     ws.request.body?.type === 'json' && !validateJson(ws.request.body.text).valid
   const canSend = !urlEmpty && !bodyInvalid && ws.status !== 'loading'
 
+  const openPalette = useCallback(() => {
+    ws.setPaletteOpen(!ws.paletteOpen)
+  }, [ws])
+
   const shortcuts = useMemo(
     () => ({
-      'mod+k': () => ws.setPaletteOpen(true),
+      // Chrome and Edge reserve Ctrl+K for the omnibox and ignore
+      // preventDefault, so the palette also answers to these aliases.
+      'mod+k': openPalette,
+      'mod+shift+p': openPalette,
+      'mod+shift+f': openPalette,
       'mod+enter': () => canSend && send(),
       'mod+b': () => ws.toggleNavigation(),
       'mod+j': () => ws.resetRequest(),
@@ -43,7 +51,7 @@ export default function App() {
         ws.setShortcutsOpen(false)
       },
     }),
-    [ws, canSend, send]
+    [ws, canSend, send, openPalette]
   )
 
   useHotkeys(shortcuts)

@@ -47,15 +47,10 @@ export function UrlInput({ value, onChange, onSend, loading, canSend, hasError }
         id="url-input"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault()
-            onSend()
-          }
-        }}
         placeholder="https://jsonplaceholder.typicode.com/users"
         spellCheck={false}
         autoComplete="off"
+        // Ctrl/Cmd+Enter is handled by the global hotkey so it cannot fire twice.
         className="min-w-0 flex-1 bg-transparent px-3 font-mono text-sm text-fg placeholder:text-subtle focus:outline-none"
       />
       <button

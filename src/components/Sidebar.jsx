@@ -296,7 +296,7 @@ export function Sidebar({ onSend, canSend }) {
 }
 
 function RequestFooter({ onSend, canSend }) {
-  const { request, patchRequest, METHODS, activeEnvironment, activeEnvironmentId, setActiveEnvironmentId, setEnvManagerOpen, environments } = useWorkspace()
+  const { request, patchRequest, METHODS, status, activeEnvironment, activeEnvironmentId, setActiveEnvironmentId, setEnvManagerOpen, environments } = useWorkspace()
   const [envOpen, setEnvOpen] = useState(false)
 
   return (
@@ -308,7 +308,7 @@ function RequestFooter({ onSend, canSend }) {
           onChange={(url) => patchRequest({ url })}
           onSend={onSend}
           canSend={canSend}
-          loading={false}
+          loading={status === 'loading'}
         />
       </div>
 
